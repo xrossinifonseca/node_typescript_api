@@ -4,14 +4,19 @@ interface CreateStoreRequest {
 }
 
 export class InMemoryStoreReposity {
-  public item: CreateStoreRequest[] = [];
+  public app: CreateStoreRequest[] = [];
+
+  constructor() {
+    this.createStore;
+    this.app;
+  }
 
   createStore(data: CreateStoreRequest) {
-    const findStore = this.item.some((item) => item.name === data.name);
+    const findStore = this.app.some((item) => item.name === data.name);
 
     if (findStore) throw new Error(`${data.name} already exists}`);
 
-    this.item.push({
+    this.app.push({
       name: data.name,
       region: data.region,
     });
