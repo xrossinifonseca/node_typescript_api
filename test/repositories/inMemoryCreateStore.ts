@@ -14,7 +14,7 @@ export class InMemoryStoreReposity {
   createStore(data: CreateStoreRequest) {
     const findStore = this.app.some((item) => item.name === data.name);
 
-    if (findStore) throw new Error(`${data.name} already exists}`);
+    if (findStore) throw new Error(`Store ${data.name} already exists`);
 
     this.app.push({
       name: data.name,
