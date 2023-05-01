@@ -6,13 +6,22 @@ export class StoreController {
     const { name, region } = req.body;
 
     try {
-      if (!name || !region) res.status(404).send("Input request required");
+      if (!name || !region)
+        res.status(400).send({
+          message: "Missing or invalid input",
+          details: { name, region },
+        });
 
       const result = await newStore.createStore(req.body);
 
       return res.send(result);
-    } catch (err) {
-      res.status(404).send({ err: `Store already exists` });
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error(err.message);
+        return res.status(500).send({ error: err.message });
+      }
+
+      console.error(err);
     }
   }
 }
