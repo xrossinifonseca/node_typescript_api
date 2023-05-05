@@ -16,45 +16,69 @@ describe("StockRepository", () => {
     await prismaTest.$disconnect();
   });
 
-  it("RegisterProduct should create a new product", async () => {
-    const product: Product = {
-      name: "snicker",
-      serieNumber: "1234",
-      qty: 32,
-      price: new Decimal(30),
-      validity: new Date(),
-    };
+  describe("stockRepository.RegisterProduct", () => {
+    it("should create a new product", async () => {
+      const product: Product = {
+        name: "snicker",
+        serieNumber: "1234",
+        qty: 32,
+        price: new Decimal(30),
+        validity: new Date(),
+      };
 
-    const registerProduct = await stockRepository.registerProduct(product);
+      const registerProduct = await stockRepository.registerProduct(product);
 
-    expect(registerProduct).toHaveProperty("id");
-    expect(registerProduct.name).toEqual(product.name);
-    expect(registerProduct.serieNumber).toEqual(product.serieNumber);
+      expect(registerProduct).toHaveProperty("id");
+      expect(registerProduct.name).toEqual(product.name);
+      expect(registerProduct.serieNumber).toEqual(product.serieNumber);
+    });
   });
 
-  it("should return an array of products with the same name", async () => {
-    const product1: Product = {
-      name: "snicker",
-      serieNumber: "1234",
-      qty: 32,
-      price: new Decimal(30),
-      validity: new Date(),
-    };
-    const product2: Product = {
-      name: "snicker",
-      serieNumber: "12345",
-      qty: 32,
-      price: new Decimal(10),
-      validity: new Date(),
-    };
+  describe("stockRepository.findProductByName", () => {
+    it("should return an array of products with the same name", async () => {
+      const product1: Product = {
+        name: "snicker",
+        serieNumber: "1234",
+        qty: 32,
+        price: new Decimal(30),
+        validity: new Date(),
+      };
+      const product2: Product = {
+        name: "snicker",
+        serieNumber: "12345",
+        qty: 32,
+        price: new Decimal(10),
+        validity: new Date(),
+      };
 
-    await stockRepository.registerProduct(product1);
-    await stockRepository.registerProduct(product2);
+      await stockRepository.registerProduct(product1);
+      await stockRepository.registerProduct(product2);
 
-    const productsFound = await stockRepository.findProductByName("snicker");
+      const productsFound = await stockRepository.findProductByName("snicker");
 
-    expect(productsFound).toHaveLength(2);
-    expect(productsFound[0].name).toEqual(product1.name);
-    expect(productsFound[0].qty).toEqual(product1.qty);
+      expect(productsFound).toHaveLength(2);
+      expect(productsFound[1].name).toEqual(product1.name);
+      expect(productsFound[0].qty).toEqual(product1.qty);
+    });
+  });
+
+  describe("stockRepository.findBySerialNumber", () => {
+    it("should return a product with the serial number selected", async () => {
+      const product: Product = {
+        name: "snicker",
+        serieNumber: "12345",
+        qty: 32,
+        price: new Decimal(10),
+        validity: new Date(),
+      };
+
+      await stockRepository.registerProduct(product);
+
+      const productSelected = await stockRepository.FindBySerialNumber(
+        product.serieNumber
+      );
+
+      expect(productSelected?.serieNumber).toEqual(product.serieNumber);
+    });
   });
 });
