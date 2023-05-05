@@ -1,4 +1,3 @@
-import { prismaClient } from "../infra/database/prismaClient";
 import { PrismaClient, Stock } from "@prisma/client";
 import { Product } from "../entities/Product";
 
@@ -19,8 +18,26 @@ export class StockRepository {
     return newProduct;
   }
 
+  public async FindBySerialNumber(
+    serieNumber: string
+  ): Promise<Product | null> {
+    const product = await this.prismaClient.stock.findFirst({
+      where: {
+        serieNumber,
+      },
+    });
+
+    return product;
+  }
+
+  public async GetAllProducts(): Promise<Product[]> {
+    const allProducts = await this.prismaClient.stock.findMany();
+
+    return allProducts;
+  }
+
   public async findProductByName(productName: string): Promise<Stock[]> {
-    const products = await prismaClient.stock.findMany({
+    const products = await this.prismaClient.stock.findMany({
       where: {
         name: productName,
       },
