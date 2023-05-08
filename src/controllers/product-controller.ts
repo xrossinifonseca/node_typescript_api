@@ -1,23 +1,18 @@
-import { StockRepository } from "../repositories/stock-repository";
-import { StockService } from "../services/stock-service";
+import { ProductService } from "../services/product-service";
 import { Request, Response } from "express";
-import { Stock } from "@prisma/client";
-import { prismaClient } from "../infra/database/prismaClient";
 import { ProductEntity } from "../entities/Product";
 
-// const stockService = new StockService();
+export class ProductController {
+  private productService: ProductService;
 
-export class StockController {
-  private stockService: StockService;
-
-  constructor(stockService: StockService) {
-    this.stockService = stockService;
+  constructor(productService: ProductService) {
+    this.productService = productService;
   }
 
   public async handle(req: Request, res: Response): Promise<void> {
     try {
       const data: ProductEntity = req.body;
-      const newProduct = await this.stockService.register(data);
+      const newProduct = await this.productService.register(data);
 
       res.status(201).send({
         message: "Successfully registered product",
@@ -32,7 +27,7 @@ export class StockController {
 
   public async getAllProduct(req: Request, res: Response): Promise<void> {
     try {
-      const allProducts = await this.stockService.validGetAllProducts();
+      const allProducts = await this.productService.validGetAllProducts();
 
       res.status(200).send({
         message: "Products successfully found",
@@ -49,7 +44,7 @@ export class StockController {
     try {
       const { name } = req.params;
 
-      const products = await this.stockService.getProductsByName(name);
+      const products = await this.productService.getProductsByName(name);
 
       res.status(200).send({ message: "Product found", products });
     } catch (err: unknown) {
