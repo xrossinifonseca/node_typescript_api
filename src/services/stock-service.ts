@@ -1,4 +1,4 @@
-import { Product } from "../entities/Product";
+import { ProductEntity } from "../entities/Product";
 import { StockRepository } from "../repositories/stock-repository";
 import { Stock } from "@prisma/client";
 
@@ -9,7 +9,7 @@ export class StockService {
     this.stockRepository = stockRepository;
   }
 
-  public async register(data: Product): Promise<Product> {
+  public async register(data: ProductEntity): Promise<ProductEntity> {
     const { name, serieNumber, qty, price } = data;
     if (!name || !serieNumber || !qty || !price)
       throw new Error("Missing or invalid input");
@@ -28,8 +28,9 @@ export class StockService {
     return product;
   }
 
-  public async validGetAllProducts(): Promise<Product[]> {
-    const allProducts: Product[] = await this.stockRepository.GetAllProducts();
+  public async validGetAllProducts(): Promise<ProductEntity[]> {
+    const allProducts: ProductEntity[] =
+      await this.stockRepository.GetAllProducts();
 
     if (!allProducts.some(Boolean))
       throw new Error(`There are no registered products`);

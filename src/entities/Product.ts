@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-export interface Product {
+export interface ProductEntity {
   name: string;
   serieNumber: string;
   qty: number;

@@ -1,7 +1,7 @@
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { prismaTest } from "../../src/infra/database/prismaTestClient";
 import { StockRepository } from "../../src/repositories/stock-repository";
-import { Product } from "../../src/entities/Product";
+import { ProductEntity } from "../../src/entities/Product";
 import { Decimal } from "@prisma/client/runtime";
 
 describe("StockRepository", () => {
@@ -18,7 +18,7 @@ describe("StockRepository", () => {
 
   describe("stockRepository.RegisterProduct", () => {
     it("should create a new product", async () => {
-      const product: Product = {
+      const product: ProductEntity = {
         name: "snicker",
         serieNumber: "1234",
         qty: 32,
@@ -36,14 +36,14 @@ describe("StockRepository", () => {
 
   describe("stockRepository.findProductByName", () => {
     it("should return an array of products with the same name", async () => {
-      const product1: Product = {
+      const product1: ProductEntity = {
         name: "snicker",
         serieNumber: "1234",
         qty: 32,
         price: new Decimal(30),
         validity: new Date(),
       };
-      const product2: Product = {
+      const product2: ProductEntity = {
         name: "snicker",
         serieNumber: "12345",
         qty: 32,
@@ -64,7 +64,7 @@ describe("StockRepository", () => {
 
   describe("stockRepository.findBySerialNumber", () => {
     it("should return a product with the serial number selected", async () => {
-      const product: Product = {
+      const product: ProductEntity = {
         name: "snicker",
         serieNumber: "12345",
         qty: 32,

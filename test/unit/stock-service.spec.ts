@@ -2,7 +2,7 @@ import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { prismaTest } from "../../src/infra/database/prismaTestClient";
 import { StockRepository } from "../../src/repositories/stock-repository";
 import { StockService } from "../../src/services/stock-service";
-import { Product } from "../../src/entities/Product";
+import { ProductEntity } from "../../src/entities/Product";
 import { Decimal } from "@prisma/client/runtime";
 
 describe("StockService", () => {
@@ -20,7 +20,7 @@ describe("StockService", () => {
 
   describe("stockService.register", () => {
     it("should throw an error if input is invalid", async () => {
-      const product: Product = {
+      const product: ProductEntity = {
         name: "",
         serieNumber: "123224",
         qty: 32,
@@ -34,7 +34,7 @@ describe("StockService", () => {
     });
 
     it("should thow an erro if serial number already exists", async () => {
-      const product1: Product = {
+      const product1: ProductEntity = {
         name: "product",
         serieNumber: "123224",
         qty: 32,
@@ -42,7 +42,7 @@ describe("StockService", () => {
         validity: new Date(),
       };
 
-      const product2: Product = {
+      const product2: ProductEntity = {
         name: "product",
         serieNumber: "123224",
         qty: 32,
@@ -57,7 +57,7 @@ describe("StockService", () => {
     });
 
     it("sould create a new product", async () => {
-      const product1: Product = {
+      const product1: ProductEntity = {
         name: "product",
         serieNumber: "123224",
         qty: 32,
@@ -81,7 +81,7 @@ describe("StockService", () => {
 
   describe("stockService.getProductByName", () => {
     it("should return an error if name is invalid", async () => {
-      const product: Product = {
+      const product: ProductEntity = {
         name: "product",
         serieNumber: "123224",
         qty: 32,
