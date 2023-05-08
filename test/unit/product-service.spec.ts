@@ -1,20 +1,20 @@
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { prismaTest } from "../../src/infra/database/prismaTestClient";
-import { StockRepository } from "../../src/repositories/stock-repository";
-import { StockService } from "../../src/services/stock-service";
+import { ProductRepository } from "../../src/repositories/product-repository";
+import { ProductService } from "../../src/services/product-service";
 import { ProductEntity } from "../../src/entities/Product";
 import { Decimal } from "@prisma/client/runtime";
 
-describe("StockService", () => {
-  const stockRepository = new StockRepository(prismaTest);
-  const stockService = new StockService(stockRepository);
+describe("ProductService", () => {
+  const stockRepository = new ProductRepository(prismaTest);
+  const stockService = new ProductService(stockRepository);
 
   beforeEach(async () => {
-    await prismaTest.stock.deleteMany();
+    await prismaTest.product.deleteMany();
   });
 
   afterAll(async () => {
-    await prismaTest.stock.deleteMany();
+    await prismaTest.product.deleteMany();
     await prismaTest.$disconnect();
   });
 
@@ -22,7 +22,7 @@ describe("StockService", () => {
     it("should throw an error if input is invalid", async () => {
       const product: ProductEntity = {
         name: "",
-        serieNumber: "123224",
+        lotNumber: "123224",
         qty: 32,
         price: new Decimal(30),
         validity: new Date(),
@@ -36,7 +36,7 @@ describe("StockService", () => {
     it("should thow an erro if serial number already exists", async () => {
       const product1: ProductEntity = {
         name: "product",
-        serieNumber: "123224",
+        lotNumber: "123224",
         qty: 32,
         price: new Decimal(30),
         validity: new Date(),
@@ -44,7 +44,7 @@ describe("StockService", () => {
 
       const product2: ProductEntity = {
         name: "product",
-        serieNumber: "123224",
+        lotNumber: "123224",
         qty: 32,
         price: new Decimal(30),
         validity: new Date(),
@@ -52,14 +52,14 @@ describe("StockService", () => {
       await stockService.register(product1);
 
       expect(async () => await stockService.register(product2)).rejects.toThrow(
-        `Product with the serial number ${product2.serieNumber} already exists`
+        `Product with the lot number ${product2.lotNumber} already exists`
       );
     });
 
     it("sould create a new product", async () => {
       const product1: ProductEntity = {
         name: "product",
-        serieNumber: "123224",
+        lotNumber: "123224",
         qty: 32,
         price: new Decimal(30),
         validity: new Date(),
@@ -67,7 +67,7 @@ describe("StockService", () => {
       const result = await stockService.register(product1);
 
       expect(result.name).toEqual(product1.name);
-      expect(result.serieNumber).toEqual(product1.serieNumber);
+      expect(result.lotNumber).toEqual(product1.lotNumber);
     });
   });
 
@@ -83,7 +83,7 @@ describe("StockService", () => {
     it("should return an error if name is invalid", async () => {
       const product: ProductEntity = {
         name: "product",
-        serieNumber: "123224",
+        lotNumber: "123224",
         qty: 32,
         price: new Decimal(30),
         validity: new Date(),
