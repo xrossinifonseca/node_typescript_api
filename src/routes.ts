@@ -1,20 +1,19 @@
 import { Router } from "express";
 import { StoreController } from "./controllers/store-controller";
-import { StockController } from "./controllers/stock-controller";
-import { stockDependecy } from "./utils/dependencies";
+import { productController } from "./utils/dependencies";
 
 const router = Router();
 const storeRouteController = new StoreController();
 
 router.post("/stores", (req, res) => storeRouteController.handle(req, res));
 
-router.post("/stock", stockDependecy.handle.bind(stockDependecy));
+router.post("/product", productController.handle.bind(productController));
 
-router.get("/stock", stockDependecy.getAllProduct.bind(stockDependecy));
+router.get("/product", productController.getAllProduct.bind(productController));
 
 router.get(
-  "/stock/:name",
-  stockDependecy.getProductSelected.bind(stockDependecy)
+  "/product/:name",
+  productController.getProductSelected.bind(productController)
 );
 
 export { router };
