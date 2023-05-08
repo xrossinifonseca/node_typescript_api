@@ -1,8 +1,8 @@
-import { StockRepository } from "../repositories/stock-repository";
-import { StockController } from "../controllers/stock-controller";
-import { StockService } from "../services/stock-service";
+import { ProductRepository } from "../repositories/product-repository";
+import { ProductController } from "../controllers/product-controller";
+import { ProductService } from "../services/product-service";
 import { prismaClient } from "../infra/database/prismaClient";
 
-const stockRepository = new StockRepository(prismaClient);
-const stockService = new StockService(stockRepository);
-export const stockDependecy = new StockController(stockService);
+const productRepository = new ProductRepository(prismaClient);
+const productService = new ProductService(productRepository);
+export const productController = new ProductController(productService);
