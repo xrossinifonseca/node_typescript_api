@@ -22,10 +22,10 @@ model Store {
 
 }
 
-model Stock {
+model Product {
   id String @id @default(uuid())
   name String
-  serieNumber String
+  lotNumber String
   qty Int
   price Decimal @db.Decimal(10,2)
   validity DateTime? @db.Timestamp(0)
