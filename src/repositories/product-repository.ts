@@ -1,7 +1,7 @@
-import { PrismaClient, Stock } from "@prisma/client";
+import { PrismaClient, Product } from "@prisma/client";
 import { ProductEntity } from "../entities/Product";
 
-export class StockRepository {
+export class ProductRepository {
   private prismaClient: PrismaClient;
 
   constructor(prismaClient: PrismaClient) {
@@ -9,7 +9,7 @@ export class StockRepository {
   }
 
   public async registerProduct(product: ProductEntity): Promise<ProductEntity> {
-    const newProduct = await this.prismaClient.stock.create({
+    const newProduct = await this.prismaClient.product.create({
       data: {
         ...product,
       },
@@ -19,11 +19,11 @@ export class StockRepository {
   }
 
   public async FindBySerialNumber(
-    serieNumber: string
+    lotNumber: string
   ): Promise<ProductEntity | null> {
-    const product = await this.prismaClient.stock.findFirst({
+    const product = await this.prismaClient.product.findFirst({
       where: {
-        serieNumber,
+        lotNumber,
       },
     });
 
@@ -31,13 +31,13 @@ export class StockRepository {
   }
 
   public async GetAllProducts(): Promise<ProductEntity[]> {
-    const allProducts = await this.prismaClient.stock.findMany();
+    const allProducts = await this.prismaClient.product.findMany();
 
     return allProducts;
   }
 
-  public async findProductByName(productName: string): Promise<Stock[]> {
-    const products = await this.prismaClient.stock.findMany({
+  public async findProductByName(productName: string): Promise<Product[]> {
+    const products = await this.prismaClient.product.findMany({
       where: {
         name: productName,
       },
