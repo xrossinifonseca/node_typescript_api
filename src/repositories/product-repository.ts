@@ -30,8 +30,8 @@ export class ProductRepository {
     return product;
   }
 
-  public async GetAllProducts(): Promise<ProductEntity[]> {
-    const allProducts = await this.prismaClient.product.findMany();
+  public async GetAllProducts(): Promise<Product[]> {
+    const allProducts: Product[] = await this.prismaClient.product.findMany();
 
     return allProducts;
   }
