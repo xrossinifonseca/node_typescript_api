@@ -9,10 +9,10 @@ export class ProductController {
     this.productService = productService;
   }
 
-  public async handle(req: Request, res: Response): Promise<void> {
+  public async postProduct(req: Request, res: Response): Promise<void> {
     try {
       const data: ProductEntity = req.body;
-      const newProduct = await this.productService.register(data);
+      const newProduct = await this.productService.registerSafely(data);
 
       res.status(201).send({
         message: "Successfully registered product",
@@ -27,7 +27,7 @@ export class ProductController {
 
   public async getAllProduct(req: Request, res: Response): Promise<void> {
     try {
-      const allProducts = await this.productService.validGetAllProducts();
+      const allProducts = await this.productService.getAllProductsSafely();
 
       res.status(200).send({
         message: "Products successfully found",
@@ -47,6 +47,25 @@ export class ProductController {
       const products = await this.productService.getProductsByName(name);
 
       res.status(200).send({ message: "Product found", products });
+    } catch (err: unknown) {
+      this.handleError(err, res);
+    } finally {
+      res.end();
+    }
+  }
+
+  public async putProduct(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+
+      const updatedProduct = await this.productService.updateProductSafely(
+        id,
+        req.body
+      );
+
+      res
+        .status(200)
+        .send({ message: `Product with ID ${id} was updated`, updatedProduct });
     } catch (err: unknown) {
       this.handleError(err, res);
     } finally {
