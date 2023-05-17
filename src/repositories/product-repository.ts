@@ -1,5 +1,5 @@
 import { PrismaClient, Product } from "@prisma/client";
-import { ProductEntity } from "../entities/Product";
+import { DeleteProductResponse, ProductEntity } from "../entities/Product";
 
 export class ProductRepository {
   private prismaClient: PrismaClient;
@@ -61,5 +61,19 @@ export class ProductRepository {
     });
 
     return product;
+  }
+
+  public async deleteProduct(
+    productId: string
+  ): Promise<DeleteProductResponse> {
+    const product = await this.prismaClient.product.delete({
+      where: {
+        id: productId,
+      },
+    });
+
+    const message = `product ${product.name} deleted sucessfully`;
+
+    return { message, deletedProduct: product };
   }
 }
