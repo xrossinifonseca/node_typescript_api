@@ -6,3 +6,8 @@ export interface ProductEntity {
   price: Prisma.Decimal;
   validity?: Date | null;
 }
+
+export interface DeleteProductResponse {
+  message: string;
+  deletedProduct: ProductEntity;
+}
