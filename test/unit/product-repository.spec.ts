@@ -17,7 +17,7 @@ describe("ProductRepository", () => {
     await prismaTest.$disconnect();
   });
 
-  describe("productRepository.RegisterProduct", () => {
+  describe("RegisterProduct", () => {
     it("should create a new product", async () => {
       const product: ProductEntity = {
         name: "snicker",
@@ -35,7 +35,7 @@ describe("ProductRepository", () => {
     });
   });
 
-  describe("productRepository.findProductByName", () => {
+  describe("findProductByName", () => {
     it("should return an array of products with the same name", async () => {
       const product1: ProductEntity = {
         name: "snicker",
@@ -65,7 +65,7 @@ describe("ProductRepository", () => {
     });
   });
 
-  describe("productRepository.findBySerialNumber", () => {
+  describe("findBySerialNumber", () => {
     it("should return a product with the serial number selected", async () => {
       const product: ProductEntity = {
         name: "snicker",
@@ -85,7 +85,7 @@ describe("ProductRepository", () => {
     });
   });
 
-  describe("productRepostory.getAllProduct", () => {
+  describe("getAllProduct", () => {
     it("should return all products", async () => {
       const product: ProductEntity = {
         name: "snicker",
@@ -113,7 +113,7 @@ describe("ProductRepository", () => {
     });
   });
 
-  describe("productRepository.updateProduct", () => {
+  describe("updateProduct", () => {
     it("should update the product", async () => {
       const item: ProductEntity = {
         name: "snicker",
@@ -138,6 +138,28 @@ describe("ProductRepository", () => {
 
       expect(getProductByName?.name).toEqual(itemUpdate.name);
       expect(getProductByName?.lotNumber).toEqual(itemUpdate.lotNumber);
+    });
+  });
+
+  describe("deleteProduct", () => {
+    it("should delete a product", async () => {
+      const item: ProductEntity = {
+        name: "snicker",
+        lotNumber: "1234",
+        qty: 32,
+        price: new Decimal(30),
+        validity: new Date(),
+      };
+
+      const product = await productRepository.registerProduct(item);
+
+      const productDeleted = await productRepository.deleteProduct(product.id);
+      const getAllProducts = await productRepository.GetAllProducts();
+
+      expect(productDeleted.message).toEqual(
+        `product ${product.name} deleted sucessfully`
+      );
+      expect(getAllProducts.length).toEqual(0);
     });
   });
 });
