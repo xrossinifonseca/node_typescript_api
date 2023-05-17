@@ -107,8 +107,37 @@ describe("ProductRepository", () => {
       await productRepository.registerProduct(product2);
 
       const allProducts: Product[] = await productRepository.GetAllProducts();
+
       expect(allProducts.length).toEqual(2);
       expect(allProducts[1].lotNumber).toEqual(product2.lotNumber);
+    });
+  });
+
+  describe("productRepository.updateProduct", () => {
+    it("should update the product", async () => {
+      const item: ProductEntity = {
+        name: "snicker",
+        lotNumber: "1234",
+        qty: 32,
+        price: new Decimal(30),
+        validity: new Date(),
+      };
+      const itemUpdate: ProductEntity = {
+        name: "snicker-chocolate",
+        lotNumber: "1234",
+        qty: 32,
+        price: new Decimal(10),
+        validity: new Date(),
+      };
+
+      const product = await productRepository.registerProduct(item);
+      await productRepository.updatedProductById(product.id, itemUpdate);
+      const getProductByName = await productRepository.FindBySerialNumber(
+        item.lotNumber
+      );
+
+      expect(getProductByName?.name).toEqual(itemUpdate.name);
+      expect(getProductByName?.lotNumber).toEqual(itemUpdate.lotNumber);
     });
   });
 });
