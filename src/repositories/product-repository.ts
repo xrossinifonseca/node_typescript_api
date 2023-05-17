@@ -8,7 +8,7 @@ export class ProductRepository {
     this.prismaClient = prismaClient;
   }
 
-  public async registerProduct(product: ProductEntity): Promise<ProductEntity> {
+  public async registerProduct(product: ProductEntity): Promise<Product> {
     const newProduct = await this.prismaClient.product.create({
       data: {
         ...product,
@@ -44,5 +44,22 @@ export class ProductRepository {
     });
 
     return products;
+  }
+
+  public async updatedProductById(
+    id: string,
+    productId: ProductEntity
+  ): Promise<Product> {
+    const product = await this.prismaClient.product.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name: productId.name,
+        price: productId.price,
+      },
+    });
+
+    return product;
   }
 }
