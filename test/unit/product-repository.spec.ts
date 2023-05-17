@@ -3,9 +3,10 @@ import { prismaTest } from "../../src/infra/database/prismaTestClient";
 import { ProductRepository } from "../../src/repositories/product-repository";
 import { ProductEntity } from "../../src/entities/Product";
 import { Decimal } from "@prisma/client/runtime";
+import { Product } from "@prisma/client";
 
 describe("ProductRepository", () => {
-  const stockRepository = new ProductRepository(prismaTest);
+  const productRepository = new ProductRepository(prismaTest);
 
   beforeEach(async () => {
     await prismaTest.product.deleteMany();
@@ -16,7 +17,7 @@ describe("ProductRepository", () => {
     await prismaTest.$disconnect();
   });
 
-  describe("stockRepository.RegisterProduct", () => {
+  describe("productRepository.RegisterProduct", () => {
     it("should create a new product", async () => {
       const product: ProductEntity = {
         name: "snicker",
@@ -26,7 +27,7 @@ describe("ProductRepository", () => {
         validity: new Date(),
       };
 
-      const registerProduct = await stockRepository.registerProduct(product);
+      const registerProduct = await productRepository.registerProduct(product);
 
       expect(registerProduct).toHaveProperty("id");
       expect(registerProduct.name).toEqual(product.name);
@@ -34,7 +35,7 @@ describe("ProductRepository", () => {
     });
   });
 
-  describe("stockRepository.findProductByName", () => {
+  describe("productRepository.findProductByName", () => {
     it("should return an array of products with the same name", async () => {
       const product1: ProductEntity = {
         name: "snicker",
@@ -51,10 +52,12 @@ describe("ProductRepository", () => {
         validity: new Date(),
       };
 
-      await stockRepository.registerProduct(product1);
-      await stockRepository.registerProduct(product2);
+      await productRepository.registerProduct(product1);
+      await productRepository.registerProduct(product2);
 
-      const productsFound = await stockRepository.findProductByName("snicker");
+      const productsFound = await productRepository.findProductByName(
+        "snicker"
+      );
 
       expect(productsFound).toHaveLength(2);
       expect(productsFound[1].name).toEqual(product1.name);
@@ -62,7 +65,7 @@ describe("ProductRepository", () => {
     });
   });
 
-  describe("stockRepository.findBySerialNumber", () => {
+  describe("productRepository.findBySerialNumber", () => {
     it("should return a product with the serial number selected", async () => {
       const product: ProductEntity = {
         name: "snicker",
@@ -72,13 +75,40 @@ describe("ProductRepository", () => {
         validity: new Date(),
       };
 
-      await stockRepository.registerProduct(product);
+      await productRepository.registerProduct(product);
 
-      const productSelected = await stockRepository.FindBySerialNumber(
+      const productSelected = await productRepository.FindBySerialNumber(
         product.lotNumber
       );
 
       expect(productSelected?.lotNumber).toEqual(product.lotNumber);
+    });
+  });
+
+  describe("productRepostory.getAllProduct", () => {
+    it("should return all products", async () => {
+      const product: ProductEntity = {
+        name: "snicker",
+        lotNumber: "1234",
+        qty: 32,
+        price: new Decimal(30),
+        validity: new Date(),
+      };
+
+      const product2: ProductEntity = {
+        name: "snicker",
+        lotNumber: "1234",
+        qty: 32,
+        price: new Decimal(30),
+        validity: new Date(),
+      };
+
+      await productRepository.registerProduct(product);
+      await productRepository.registerProduct(product2);
+
+      const allProducts: Product[] = await productRepository.GetAllProducts();
+      expect(allProducts.length).toEqual(2);
+      expect(allProducts[1].lotNumber).toEqual(product2.lotNumber);
     });
   });
 });
