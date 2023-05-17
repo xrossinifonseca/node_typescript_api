@@ -18,7 +18,7 @@ describe("ProductService", () => {
     await prismaTest.$disconnect();
   });
 
-  describe("productService.register", () => {
+  describe("productService.registerSafely", () => {
     it("should throw an error if input is invalid", async () => {
       const product: ProductEntity = {
         name: "",
@@ -28,7 +28,7 @@ describe("ProductService", () => {
         validity: new Date(),
       };
 
-      expect(() => productService.register(product)).rejects.toThrow(
+      expect(() => productService.registerSafely(product)).rejects.toThrow(
         "Missing or invalid input"
       );
     });
@@ -49,10 +49,10 @@ describe("ProductService", () => {
         price: new Decimal(30),
         validity: new Date(),
       };
-      await productService.register(product1);
+      await productService.registerSafely(product1);
 
       expect(
-        async () => await productService.register(product2)
+        async () => await productService.registerSafely(product2)
       ).rejects.toThrow(
         `Product with the lot number ${product2.lotNumber} already exists`
       );
@@ -66,17 +66,17 @@ describe("ProductService", () => {
         price: new Decimal(30),
         validity: new Date(),
       };
-      const result = await productService.register(product1);
+      const result = await productService.registerSafely(product1);
 
       expect(result.name).toEqual(product1.name);
       expect(result.lotNumber).toEqual(product1.lotNumber);
     });
   });
 
-  describe("productService.validGetAllProducts", () => {
+  describe("productService.getAllProductsSafely", () => {
     it("should return an error if no products exists", async () => {
       expect(
-        async () => await productService.validGetAllProducts()
+        async () => await productService.getAllProductsSafely()
       ).rejects.toThrow("There are no registered products");
     });
   });
@@ -91,7 +91,7 @@ describe("ProductService", () => {
         validity: new Date(),
       };
 
-      await productService.register(product);
+      await productService.registerSafely(product);
 
       expect(
         async () => await productService.getProductsByName("")
@@ -102,6 +102,23 @@ describe("ProductService", () => {
       expect(
         async () => await productService.getProductsByName("snickers")
       ).rejects.toThrow("Product not found");
+    });
+  });
+
+  describe("productService.updateProductSafely", () => {
+    it("should throw an error if the id is not valid", async () => {
+      const id = "123123123";
+      const itemUpdate: ProductEntity = {
+        name: "snicker-chocolate",
+        lotNumber: "1234",
+        qty: 32,
+        price: new Decimal(10),
+        validity: new Date(),
+      };
+
+      expect(
+        async () => await productService.updateProductSafely(id, itemUpdate)
+      ).rejects.toThrow("Invalid ID");
     });
   });
 });
