@@ -28,8 +28,8 @@ export class ProductService {
     return product;
   }
 
-  public async validGetAllProducts(): Promise<ProductEntity[]> {
-    const allProducts: ProductEntity[] =
+  public async validGetAllProducts(): Promise<Product[]> {
+    const allProducts: Product[] =
       await this.productRepository.GetAllProducts();
 
     if (!allProducts.some(Boolean))
