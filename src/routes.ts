@@ -21,4 +21,9 @@ router.put(
   productController.putProduct.bind(productController)
 );
 
+router.delete(
+  "/product/:id",
+  productController.deleteProduct.bind(productController)
+);
+
 export { router };
