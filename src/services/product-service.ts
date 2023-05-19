@@ -1,4 +1,4 @@
-import { ProductEntity } from "../entities/Product";
+import { DeleteProductResponse, ProductEntity } from "../entities/Product";
 import { prismaClient } from "../infra/database/prismaClient";
 import { ProductRepository } from "../repositories/product-repository";
 import { Product } from "@prisma/client";
@@ -62,6 +62,15 @@ export class ProductService {
     const item = await this.productRepository.updatedProductById(id, product);
 
     return item;
+  }
+
+  public async deleteProductSafely(id: string): Promise<DeleteProductResponse> {
+    const validationId = await this.validId(id);
+    if (!validationId) throw new Error(`Product with id ${id} does not exist`);
+
+    const deletedProduct = await this.productRepository.deleteProduct(id);
+
+    return deletedProduct;
   }
 
   private async validId(id: string): Promise<boolean> {
