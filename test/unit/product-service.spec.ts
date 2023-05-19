@@ -18,7 +18,7 @@ describe("ProductService", () => {
     await prismaTest.$disconnect();
   });
 
-  describe("productService.registerSafely", () => {
+  describe("registerSafely", () => {
     it("should throw an error if input is invalid", async () => {
       const product: ProductEntity = {
         name: "",
@@ -73,7 +73,7 @@ describe("ProductService", () => {
     });
   });
 
-  describe("productService.getAllProductsSafely", () => {
+  describe("getAllProductsSafely", () => {
     it("should return an error if no products exists", async () => {
       expect(
         async () => await productService.getAllProductsSafely()
@@ -81,7 +81,7 @@ describe("ProductService", () => {
     });
   });
 
-  describe("productService.getProductByName", () => {
+  describe("getProductByName", () => {
     it("should return an error if name is invalid", async () => {
       const product: ProductEntity = {
         name: "product",
@@ -105,7 +105,7 @@ describe("ProductService", () => {
     });
   });
 
-  describe("productService.updateProductSafely", () => {
+  describe("updateProductSafely", () => {
     it("should throw an error if the id is not valid", async () => {
       const id = "123123123";
       const itemUpdate: ProductEntity = {
