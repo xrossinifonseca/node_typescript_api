@@ -28,4 +28,12 @@
 <h4>POST /stock </h4>
 
 <p>Cria um novo produto<p>
+  
+  </br>
+  
+  <h4>PUT /stock </h4>
+
+<p>Modifica um produto<p>
+  
+  </br>
 
