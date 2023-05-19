@@ -73,6 +73,19 @@ export class ProductController {
     }
   }
 
+  public async deleteProduct(req: Request, res: Response): Promise<void> {
+    const { id } = req.params;
+    try {
+      const productDeleted = await this.productService.deleteProductSafely(id);
+
+      res.status(200).send(productDeleted);
+    } catch (err: unknown) {
+      this.handleError(err, res);
+    } finally {
+      res.end();
+    }
+  }
+
   private handleError(err: unknown, res: Response): any {
     if (err instanceof Error) {
       console.error(err.message);
