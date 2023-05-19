@@ -4,6 +4,7 @@ import { ProductRepository } from "../../src/repositories/product-repository";
 import { ProductService } from "../../src/services/product-service";
 import { ProductEntity } from "../../src/entities/Product";
 import { Decimal } from "@prisma/client/runtime";
+import { Product } from "@prisma/client";
 
 describe("ProductService", () => {
   const productRepository = new ProductRepository(prismaTest);
@@ -119,6 +120,16 @@ describe("ProductService", () => {
       expect(
         async () => await productService.updateProductSafely(id, itemUpdate)
       ).rejects.toThrow("Invalid ID");
+    });
+  });
+
+  describe("deleteProductSafely", () => {
+    it("should throw an error if product does not exist ", async () => {
+      const id = "fake-id";
+
+      expect(
+        async () => await productService.deleteProductSafely(id)
+      ).rejects.toThrow(`Product with id ${id} does not exist`);
     });
   });
 });
