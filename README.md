@@ -31,7 +31,7 @@
   
   </br>
   
-  <h4>PUT /stock </h4>
+  <h4>PUT /stock/:id </h4>
 
 <p>Modifica um produto<p>
   
