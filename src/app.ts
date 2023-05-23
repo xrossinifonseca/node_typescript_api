@@ -1,28 +1,21 @@
-import express, { Application, Request, Response } from "express";
-import bodyParser from "body-parser";
-import { router } from "./routes";
+import express, { Application } from "express";
 
 export class Server {
-  private app: Application;
+  app: Application;
+  private readonly port = process.env.PORT || 3005;
 
   constructor() {
     this.app = express();
-    this.config();
-    this.routes();
-  }
-
-  private config(): void {
-    this.app.use(bodyParser.json());
-    this.app.use(bodyParser.urlencoded({ extended: false }));
-  }
-
-  private routes(): void {
-    this.app.use(router);
+    this.app.use(express.json());
   }
 
   public start(): void {
-    this.app.listen(3005, () => {
-      console.log("server started on port 3005");
-    });
+    this.app
+      .listen(this.port, () => {
+        console.log(`server started on port ${this.port}`);
+      })
+      .on("error", (err) => {
+        console.error(`Error starting server:${err.message}`);
+      });
   }
 }
