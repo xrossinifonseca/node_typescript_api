@@ -72,8 +72,22 @@ export class ProductRepository {
       },
     });
 
-    const message = `product ${product.name} deleted sucessfully`;
+    const message = `product ${product.name} deleted successfully`;
 
     return { message, deletedProduct: product };
+  }
+
+  async validId(id: string): Promise<boolean> {
+    const record = await this.prismaClient.product.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!record) {
+      return false;
+    }
+
+    return true;
   }
 }
