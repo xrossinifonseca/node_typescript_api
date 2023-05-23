@@ -55,7 +55,7 @@ export class ProductService {
     id: string,
     product: ProductEntity
   ): Promise<Product> {
-    const validationId = await this.validId(id);
+    const validationId = await this.productRepository.validId(id);
 
     if (!validationId) throw new Error("Invalid ID");
 
@@ -65,25 +65,11 @@ export class ProductService {
   }
 
   public async deleteProductSafely(id: string): Promise<DeleteProductResponse> {
-    const validationId = await this.validId(id);
+    const validationId = await this.productRepository.validId(id);
     if (!validationId) throw new Error(`Product with id ${id} does not exist`);
 
     const deletedProduct = await this.productRepository.deleteProduct(id);
 
     return deletedProduct;
-  }
-
-  private async validId(id: string): Promise<boolean> {
-    const record = await prismaClient.product.findUnique({
-      where: {
-        id: id,
-      },
-    });
-
-    if (!record) {
-      return false;
-    }
-
-    return true;
   }
 }
