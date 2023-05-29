@@ -34,14 +34,25 @@ export class StockService {
     return newEntry;
   }
 
-  public async getByProductIdSefaly(id: string): Promise<Stock> {
-    // verificar id do produto
+  public async productsInStockSafely(): Promise<Stock[]> {
+    const products: Stock[] = await this.stockRepository.productsInStock();
 
-    if (!id) throw new Error("Invalid ID");
+    if (!products.some(Boolean))
+      throw new Error("There is no registered products in stock");
+
+    return products;
+  }
+
+  public async getByProductIdSefaly(id: string): Promise<Stock> {
+    if (!id) throw new Error("Missing or invalid input");
+
+    const checkId = await this.validProductId(id);
+
+    if (!checkId) throw new Error("Product does not exist");
 
     const product = await this.stockRepository.getByProductId(id);
 
-    if (!product) throw new Error("Product does not exist");
+    if (!product) throw new Error("Product not yet registered in stock");
 
     return product;
   }
