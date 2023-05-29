@@ -44,4 +44,23 @@ describe("StockRepository", () => {
       expect(entry).toHaveProperty("id");
     });
   });
+
+  describe("productInStock", () => {
+    it("must return a list of products in stock", async () => {
+      const newProduct = await productRepository.registerProduct(product);
+
+      const stockEntry: StockEntity = {
+        productId: newProduct.id,
+        quantity: 10,
+      };
+
+      await stockRepository.productEntry(stockEntry);
+
+      const products = await stockRepository.productsInStock();
+
+      expect(products.length).toEqual(1);
+      expect(products[0].quantity).toEqual(10);
+      expect(products[0].productId).toEqual(newProduct.id);
+    });
+  });
 });
