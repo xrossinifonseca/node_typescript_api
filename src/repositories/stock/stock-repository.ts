@@ -18,4 +18,12 @@ export class StockRepository {
 
     return newProduct;
   }
+
+  public async productsInStock(): Promise<Stock[]> {
+    const products = await this.prismaClient.stock.findMany({
+      include: { product: true },
+    });
+
+    return products;
+  }
 }
