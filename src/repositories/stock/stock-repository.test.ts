@@ -63,4 +63,38 @@ describe("StockRepository", () => {
       expect(products[0].productId).toEqual(newProduct.id);
     });
   });
+
+  describe("getByProductId", () => {
+    it("should return product in the stock by product id", async () => {
+      const newProduct = await productRepository.registerProduct(product);
+
+      const entry: StockEntity = {
+        productId: newProduct.id,
+        quantity: 5,
+      };
+      const newEntry = await stockRepository.productEntry(entry);
+
+      const getProduct = await stockRepository.getByProductId(newProduct.id);
+
+      expect(getProduct?.productId).toEqual(newProduct.id);
+      expect(getProduct?.id).toEqual(newEntry.id);
+    });
+  });
+  describe("updateProductInStock", () => {
+    it("should update the product in stock", async () => {
+      const newProduct = await productRepository.registerProduct(product);
+
+      const entry: StockEntity = {
+        productId: newProduct.id,
+        quantity: 10,
+      };
+
+      const stockEntry = await stockRepository.productEntry(entry);
+
+      const update = await stockRepository.updateProductInStock(stockEntry, 20);
+
+      expect(update.id).toEqual(stockEntry.id);
+      expect(update.quantity).toBe(20);
+    });
+  });
 });
