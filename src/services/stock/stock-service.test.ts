@@ -77,4 +77,37 @@ describe("StockService", () => {
       expect(entry.productId).toEqual(newProduct.id);
     });
   });
+
+  describe("productsInStockSafely", () => {
+    it("should throw an error if there is no product in stock", () => {
+      expect(
+        async () => await stockService.productsInStockSafely()
+      ).rejects.toThrow("There is no registered products in stock");
+    });
+  });
+
+  describe("getByProductIdSefaly", () => {
+    it("should throw an error if input is invalid", async () => {
+      const id = "";
+
+      expect(
+        async () => await stockService.getByProductIdSefaly(id)
+      ).rejects.toThrow("Missing or invalid input");
+    });
+
+    it("should throw an error if Product ID is not valid", async () => {
+      const id = "invalid-id";
+      expect(
+        async () => await stockService.getByProductIdSefaly(id)
+      ).rejects.toThrow("Product does not exist");
+    });
+
+    it("should throw an error if the product is not found in stock", async () => {
+      const newProduct = await productRepository.registerProduct(product);
+
+      expect(
+        async () => await stockService.getByProductIdSefaly(newProduct.id)
+      ).rejects.toThrow("Product not yet registered in stock");
+    });
+  });
 });
