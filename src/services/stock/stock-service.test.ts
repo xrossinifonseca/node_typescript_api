@@ -86,19 +86,19 @@ describe("StockService", () => {
     });
   });
 
-  describe("getByProductIdSefaly", () => {
+  describe("findByProductIdSefaly", () => {
     it("should throw an error if input is invalid", async () => {
       const id = "";
 
       expect(
-        async () => await stockService.getByProductIdSefaly(id)
+        async () => await stockService.findByProductIdSefaly(id)
       ).rejects.toThrow("Missing or invalid input");
     });
 
     it("should throw an error if Product ID is not valid", async () => {
       const id = "invalid-id";
       expect(
-        async () => await stockService.getByProductIdSefaly(id)
+        async () => await stockService.findByProductIdSefaly(id)
       ).rejects.toThrow("Product does not exist");
     });
 
@@ -106,7 +106,7 @@ describe("StockService", () => {
       const newProduct = await productRepository.registerProduct(product);
 
       expect(
-        async () => await stockService.getByProductIdSefaly(newProduct.id)
+        async () => await stockService.findByProductIdSefaly(newProduct.id)
       ).rejects.toThrow("Product not yet registered in stock");
     });
   });

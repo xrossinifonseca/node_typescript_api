@@ -12,7 +12,7 @@ export class StockService {
   public async entrySafely(product: StockEntity): Promise<Stock> {
     const { quantity, productId } = product;
     const checkId = await this.validProductId(productId);
-    const checkProductInStock = await this.stockRepository.getByProductId(
+    const checkProductInStock = await this.stockRepository.findByProductId(
       product.productId
     );
 
@@ -43,14 +43,14 @@ export class StockService {
     return products;
   }
 
-  public async getByProductIdSefaly(id: string): Promise<Stock> {
+  public async findByProductIdSefaly(id: string): Promise<Stock> {
     if (!id) throw new Error("Missing or invalid input");
 
     const checkId = await this.validProductId(id);
 
     if (!checkId) throw new Error("Product does not exist");
 
-    const product = await this.stockRepository.getByProductId(id);
+    const product = await this.stockRepository.findByProductId(id);
 
     if (!product) throw new Error("Product not yet registered in stock");
 
