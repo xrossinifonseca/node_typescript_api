@@ -27,10 +27,7 @@ describe("Product endpoints", () => {
     it("should create a new Product", async () => {
       const product: ProductEntity = {
         name: "test",
-        lotNumber: "123224",
-        qty: 32,
-        price: new Decimal(30),
-        validity: new Date(),
+        price: 30,
       };
 
       const response = await request(server.app)
@@ -42,33 +39,10 @@ describe("Product endpoints", () => {
       expect(response.body?.newProduct).toHaveProperty("id");
     });
 
-    it("should throw an error if product with the same lotNumber already exists ", async () => {
-      const product: ProductEntity = {
-        name: "test",
-        lotNumber: "123224",
-        qty: 32,
-        price: new Decimal(30),
-        validity: new Date(),
-      };
-
-      const response = await request(server.app)
-        .post("/products")
-        .send(product);
-
-      expect(response.status).toBe(500);
-      expect(response.body).toHaveProperty("error");
-      expect(response.body.error).toBe(
-        `Product with the lot number ${product.lotNumber} already exists`
-      );
-    });
-
     it("should throw an error if any input is invalid ", async () => {
       const product: ProductEntity = {
         name: "",
-        lotNumber: "1224",
-        qty: 32,
-        price: new Decimal(30),
-        validity: new Date(),
+        price: 30,
       };
 
       const response = await request(server.app)
@@ -112,10 +86,7 @@ describe("Product endpoints", () => {
     it("should update product with the specified id", async () => {
       const product: ProductEntity = {
         name: "test2",
-        lotNumber: "123",
-        qty: 32,
-        price: new Decimal(30),
-        validity: new Date(),
+        price: 30,
       };
 
       const productResponse = await request(server.app)
@@ -128,7 +99,7 @@ describe("Product endpoints", () => {
         .put(`/products/${newProduct.id}`)
         .send({
           name: "test2",
-          price: new Decimal(10),
+          price: 20,
         });
 
       expect(response.status).toBe(200);
