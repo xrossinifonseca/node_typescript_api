@@ -21,17 +21,14 @@ describe("ProductRepository", () => {
     it("should create a new product", async () => {
       const product: ProductEntity = {
         name: "snicker",
-        lotNumber: "1234",
-        qty: 32,
-        price: new Decimal(30),
-        validity: new Date(),
+        price: 30,
       };
 
       const registerProduct = await productRepository.registerProduct(product);
 
       expect(registerProduct).toHaveProperty("id");
       expect(registerProduct.name).toEqual(product.name);
-      expect(registerProduct.lotNumber).toEqual(product.lotNumber);
+      expect(registerProduct.price).toEqual(product.price);
     });
   });
 
@@ -39,17 +36,11 @@ describe("ProductRepository", () => {
     it("should return an array of products with the same name", async () => {
       const product1: ProductEntity = {
         name: "snicker",
-        lotNumber: "1234",
-        qty: 32,
-        price: new Decimal(30),
-        validity: new Date(),
+        price: 30,
       };
       const product2: ProductEntity = {
         name: "snicker",
-        lotNumber: "12345",
-        qty: 32,
-        price: new Decimal(10),
-        validity: new Date(),
+        price: 30,
       };
 
       await productRepository.registerProduct(product1);
@@ -61,27 +52,7 @@ describe("ProductRepository", () => {
 
       expect(productsFound).toHaveLength(2);
       expect(productsFound[1].name).toEqual(product1.name);
-      expect(productsFound[0].qty).toEqual(product1.qty);
-    });
-  });
-
-  describe("findBySerialNumber", () => {
-    it("should return a product with the serial number selected", async () => {
-      const product: ProductEntity = {
-        name: "snicker",
-        lotNumber: "12345",
-        qty: 32,
-        price: new Decimal(10),
-        validity: new Date(),
-      };
-
-      await productRepository.registerProduct(product);
-
-      const productSelected = await productRepository.FindBySerialNumber(
-        product.lotNumber
-      );
-
-      expect(productSelected?.lotNumber).toEqual(product.lotNumber);
+      expect(productsFound[0].price).toEqual(product1.price);
     });
   });
 
@@ -89,18 +60,12 @@ describe("ProductRepository", () => {
     it("should return all products", async () => {
       const product: ProductEntity = {
         name: "snicker",
-        lotNumber: "1234",
-        qty: 32,
-        price: new Decimal(30),
-        validity: new Date(),
+        price: 30,
       };
 
       const product2: ProductEntity = {
         name: "snicker",
-        lotNumber: "1234",
-        qty: 32,
-        price: new Decimal(30),
-        validity: new Date(),
+        price: 30,
       };
 
       await productRepository.registerProduct(product);
@@ -109,7 +74,8 @@ describe("ProductRepository", () => {
       const allProducts: Product[] = await productRepository.GetAllProducts();
 
       expect(allProducts.length).toEqual(2);
-      expect(allProducts[1].lotNumber).toEqual(product2.lotNumber);
+      expect(allProducts[1].price).toEqual(product2.price);
+      expect(allProducts[0].name).toEqual(product.name);
     });
   });
 
@@ -117,27 +83,22 @@ describe("ProductRepository", () => {
     it("should update the product", async () => {
       const item: ProductEntity = {
         name: "snicker",
-        lotNumber: "1234",
-        qty: 32,
-        price: new Decimal(30),
-        validity: new Date(),
+        price: 30,
       };
       const itemUpdate: ProductEntity = {
         name: "snicker-chocolate",
-        lotNumber: "1234",
-        qty: 32,
-        price: new Decimal(10),
-        validity: new Date(),
+        price: 20,
       };
 
       const product = await productRepository.registerProduct(item);
-      await productRepository.updatedProductById(product.id, itemUpdate);
-      const getProductByName = await productRepository.FindBySerialNumber(
-        item.lotNumber
+
+      const productUpdated = await productRepository.updatedProductById(
+        product.id,
+        itemUpdate
       );
 
-      expect(getProductByName?.name).toEqual(itemUpdate.name);
-      expect(getProductByName?.lotNumber).toEqual(itemUpdate.lotNumber);
+      expect(productUpdated?.name).toEqual(itemUpdate.name);
+      expect(productUpdated.price).toBe(20);
     });
   });
 
@@ -145,10 +106,7 @@ describe("ProductRepository", () => {
     it("should delete a product", async () => {
       const item: ProductEntity = {
         name: "snicker",
-        lotNumber: "1234",
-        qty: 32,
-        price: new Decimal(30),
-        validity: new Date(),
+        price: 30,
       };
 
       const product = await productRepository.registerProduct(item);

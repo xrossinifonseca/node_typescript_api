@@ -18,18 +18,6 @@ export class ProductRepository {
     return newProduct;
   }
 
-  public async FindBySerialNumber(
-    lotNumber: string
-  ): Promise<ProductEntity | null> {
-    const product = await this.prismaClient.product.findFirst({
-      where: {
-        lotNumber,
-      },
-    });
-
-    return product;
-  }
-
   public async GetAllProducts(): Promise<Product[]> {
     const allProducts: Product[] = await this.prismaClient.product.findMany();
 
