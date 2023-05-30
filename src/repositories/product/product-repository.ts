@@ -1,5 +1,5 @@
 import { PrismaClient, Product } from "@prisma/client";
-import { DeleteProductResponse, ProductEntity } from "../entities/Product";
+import { DeleteProductResponse, ProductEntity } from "../../entities/Product";
 
 export class ProductRepository {
   private prismaClient: PrismaClient;

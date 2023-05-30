@@ -1,4 +1,4 @@
-import { ProductController } from "../controllers/product-controller";
+import { ProductController } from "../controllers/product/product-controller";
 import { Router } from "express";
 
 export class ProductRouter {

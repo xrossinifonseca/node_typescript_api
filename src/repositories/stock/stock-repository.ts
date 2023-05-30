@@ -1,6 +1,6 @@
 import { PrismaClient, Stock } from "@prisma/client";
 import { StockEntity } from "../../entities/StockEntity";
-import { ProductRepository } from "../product-repository";
+import { ProductRepository } from "../product/product-repository";
 
 export class StockRepository {
   private prismaClient: PrismaClient;

@@ -1,6 +1,6 @@
-import { ProductService } from "../services/product-service";
+import { ProductService } from "../../services/product/product-service";
 import { Request, Response } from "express";
-import { ProductEntity } from "../entities/Product";
+import { ProductEntity } from "../../entities/Product";
 
 export class ProductController {
   private productService: ProductService;

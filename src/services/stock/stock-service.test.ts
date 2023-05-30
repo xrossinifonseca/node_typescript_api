@@ -4,7 +4,7 @@ import { StockRepository } from "../../repositories/stock/stock-repository";
 import { StockEntity } from "../../entities/StockEntity";
 import { Stock } from "@prisma/client";
 import { prismaTest } from "../../infra/database/prismaTestClient";
-import { ProductRepository } from "../../repositories/product-repository";
+import { ProductRepository } from "../../repositories/product/product-repository";
 import { ProductEntity } from "../../entities/Product";
 import { Decimal } from "@prisma/client/runtime";
 

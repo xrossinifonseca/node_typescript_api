@@ -1,6 +1,6 @@
-import { DeleteProductResponse, ProductEntity } from "../entities/Product";
-import { prismaClient } from "../infra/database/prismaClient";
-import { ProductRepository } from "../repositories/product-repository";
+import { DeleteProductResponse, ProductEntity } from "../../entities/Product";
+import { prismaClient } from "../../infra/database/prismaClient";
+import { ProductRepository } from "../../repositories/product/product-repository";
 import { Product } from "@prisma/client";
 
 export class ProductService {

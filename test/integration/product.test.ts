@@ -2,7 +2,7 @@ import request from "supertest";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { Server } from "../../src/app";
 import { ProductRouter } from "../../src/routes/product-routes";
-import { productTestDependency } from "../../src/dependencies/productDependenciesTest";
+import { productTestDependency } from "../../src/dependencies/product-dependency/productDependenciesTest";
 import { prismaTest } from "../../src/infra/database/prismaTestClient";
 import { ProductEntity } from "../../src/entities/Product";
 import { Decimal } from "@prisma/client/runtime";
