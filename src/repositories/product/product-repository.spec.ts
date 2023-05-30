@@ -1,7 +1,7 @@
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
-import { prismaTest } from "../../src/infra/database/prismaTestClient";
-import { ProductRepository } from "../../src/repositories/product/product-repository";
-import { ProductEntity } from "../../src/entities/Product";
+import { prismaTest } from "../../infra/database/prismaTestClient";
+import { ProductRepository } from "./product-repository";
+import { ProductEntity } from "../../entities/Product";
 import { Decimal } from "@prisma/client/runtime";
 import { Product } from "@prisma/client";
 
