@@ -12,10 +12,7 @@ describe("StockRepository", () => {
 
   const product: ProductEntity = {
     name: "test",
-    price: new Decimal(10),
-    lotNumber: "123",
-    qty: 10,
-    validity: new Date(),
+    price: 30,
   };
 
   beforeEach(async () => {
