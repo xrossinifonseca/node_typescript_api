@@ -22,10 +22,7 @@ describe("ProductService", () => {
     it("should throw an error if input is invalid", async () => {
       const product: ProductEntity = {
         name: "",
-        lotNumber: "123224",
-        qty: 32,
-        price: new Decimal(30),
-        validity: new Date(),
+        price: 30,
       };
 
       expect(() => productService.registerSafely(product)).rejects.toThrow(
@@ -33,43 +30,16 @@ describe("ProductService", () => {
       );
     });
 
-    it("should thow an erro if serial number already exists", async () => {
-      const product1: ProductEntity = {
-        name: "product",
-        lotNumber: "123224",
-        qty: 32,
-        price: new Decimal(30),
-        validity: new Date(),
-      };
-
-      const product2: ProductEntity = {
-        name: "product",
-        lotNumber: "123224",
-        qty: 32,
-        price: new Decimal(30),
-        validity: new Date(),
-      };
-      await productService.registerSafely(product1);
-
-      expect(
-        async () => await productService.registerSafely(product2)
-      ).rejects.toThrow(
-        `Product with the lot number ${product2.lotNumber} already exists`
-      );
-    });
-
     it("sould create a new product", async () => {
       const product1: ProductEntity = {
         name: "product",
-        lotNumber: "123224",
-        qty: 32,
-        price: new Decimal(30),
-        validity: new Date(),
+        price: 30,
       };
       const result = await productService.registerSafely(product1);
 
+      expect(result).toHaveProperty("id");
       expect(result.name).toEqual(product1.name);
-      expect(result.lotNumber).toEqual(product1.lotNumber);
+      expect(result.price).toEqual(product1.price);
     });
   });
 
@@ -85,10 +55,7 @@ describe("ProductService", () => {
     it("should return an error if name is invalid", async () => {
       const product: ProductEntity = {
         name: "product",
-        lotNumber: "123224",
-        qty: 32,
-        price: new Decimal(30),
-        validity: new Date(),
+        price: 30,
       };
 
       await productService.registerSafely(product);
@@ -110,10 +77,7 @@ describe("ProductService", () => {
       const id = "123123123";
       const itemUpdate: ProductEntity = {
         name: "snicker-chocolate",
-        lotNumber: "1234",
-        qty: 32,
-        price: new Decimal(10),
-        validity: new Date(),
+        price: 30,
       };
 
       expect(

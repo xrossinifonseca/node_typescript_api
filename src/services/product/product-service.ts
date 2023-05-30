@@ -11,18 +11,8 @@ export class ProductService {
   }
 
   public async registerSafely(data: ProductEntity): Promise<Product> {
-    const { name, lotNumber, qty, price } = data;
-    if (!name || !lotNumber || !qty || !price)
-      throw new Error("Missing or invalid input");
-
-    const checkProduct = await this.productRepository.FindBySerialNumber(
-      data.lotNumber
-    );
-
-    if (checkProduct)
-      throw new Error(
-        `Product with the lot number ${data.lotNumber} already exists`
-      );
+    const { name, price } = data;
+    if (!name || !price) throw new Error("Missing or invalid input");
 
     const product = await this.productRepository.registerProduct(data);
 
