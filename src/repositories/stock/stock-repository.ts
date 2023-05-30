@@ -30,7 +30,7 @@ export class StockRepository {
     return products;
   }
 
-  public async getByProductId(id: string): Promise<Stock | null> {
+  public async findByProductId(id: string): Promise<Stock | null> {
     const product = await this.prismaClient.stock.findFirst({
       where: {
         product: {

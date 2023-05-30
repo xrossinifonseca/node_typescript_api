@@ -64,7 +64,7 @@ describe("StockRepository", () => {
     });
   });
 
-  describe("getByProductId", () => {
+  describe("findByProductId", () => {
     it("should return product in the stock by product id", async () => {
       const newProduct = await productRepository.registerProduct(product);
 
@@ -74,7 +74,7 @@ describe("StockRepository", () => {
       };
       const newEntry = await stockRepository.productEntry(entry);
 
-      const getProduct = await stockRepository.getByProductId(newProduct.id);
+      const getProduct = await stockRepository.findByProductId(newProduct.id);
 
       expect(getProduct?.productId).toEqual(newProduct.id);
       expect(getProduct?.id).toEqual(newEntry.id);
