@@ -2,11 +2,9 @@ import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { StockService } from "./stock-service";
 import { StockRepository } from "../../repositories/stock/stock-repository";
 import { StockEntity } from "../../entities/StockEntity";
-import { Stock } from "@prisma/client";
 import { prismaTest } from "../../infra/database/prismaTestClient";
 import { ProductRepository } from "../../repositories/product/product-repository";
 import { ProductEntity } from "../../entities/Product";
-import { Decimal } from "@prisma/client/runtime";
 
 describe("StockService", () => {
   const productRepository = new ProductRepository(prismaTest);
@@ -52,6 +50,26 @@ describe("StockService", () => {
       expect(async () => await stockService.entrySafely(entry)).rejects.toThrow(
         "Product does not exist"
       );
+    });
+
+    it("should throw an error if the quantity is less than zero", async () => {
+      const newProduct = await productRepository.registerProduct(product);
+
+      const newEntry: StockEntity = {
+        productId: newProduct.id,
+        quantity: 10,
+      };
+
+      const newEntry2: StockEntity = {
+        productId: newProduct.id,
+        quantity: 0,
+      };
+
+      await stockService.entrySafely(newEntry);
+
+      expect(
+        async () => await stockService.entrySafely(newEntry2)
+      ).rejects.toThrow("Product quantity must be greater than zero");
     });
 
     it("should update the product quantity if the product is already in stock", async () => {
@@ -105,6 +123,41 @@ describe("StockService", () => {
       expect(
         async () => await stockService.findByProductIdSefaly(newProduct.id)
       ).rejects.toThrow("Product not yet registered in stock");
+    });
+  });
+
+  describe("updateProductInStockSafely", () => {
+    it("should throw an error if the product is not  registered in the stock", async () => {
+      const newProduct = await productRepository.registerProduct(product);
+
+      const entry: StockEntity = {
+        productId: newProduct.id,
+        quantity: 10,
+      };
+
+      expect(
+        async () => await stockService.updateProductInStockSafely(entry)
+      ).rejects.toThrow("Product not yet registered in stock");
+    });
+
+    it("should throw an error if the quantity is less than zero", async () => {
+      const newProduct = await productRepository.registerProduct(product);
+
+      const newEntry: StockEntity = {
+        productId: newProduct.id,
+        quantity: 10,
+      };
+
+      const UpdateEntry: StockEntity = {
+        productId: newProduct.id,
+        quantity: 0,
+      };
+
+      await stockService.entrySafely(newEntry);
+
+      expect(
+        async () => await stockService.updateProductInStockSafely(UpdateEntry)
+      ).rejects.toThrow("Product quantity must be greater than zero");
     });
   });
 });
