@@ -54,4 +54,20 @@ export class StockController {
       res.end();
     }
   }
+
+  async putProductInStock(req: Request, res: Response): Promise<void> {
+    try {
+      const productUpdated = await this.stockService.updateProductInStockSafely(
+        req.body
+      );
+
+      res.status(200).send({
+        productUpdated,
+      });
+    } catch (err: unknown) {
+      handleError(err, res);
+    } finally {
+      res.end();
+    }
+  }
 }
