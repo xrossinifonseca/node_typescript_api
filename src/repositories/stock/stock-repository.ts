@@ -1,6 +1,7 @@
 import { PrismaClient, Stock } from "@prisma/client";
 import { StockEntity } from "../../entities/StockEntity";
 import { ProductRepository } from "../product/product-repository";
+import { DeleteProductResponse } from "../../entities/Product";
 
 export class StockRepository {
   private prismaClient: PrismaClient;
@@ -56,5 +57,15 @@ export class StockRepository {
     });
 
     return updated;
+  }
+
+  public async deleteProductInStock(product: Stock): Promise<Stock> {
+    const findProductAndDelete = await this.prismaClient.stock.delete({
+      where: {
+        id: product.id,
+      },
+    });
+
+    return findProductAndDelete;
   }
 }
