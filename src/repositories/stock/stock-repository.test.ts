@@ -94,4 +94,26 @@ describe("StockRepository", () => {
       expect(update.quantity).toBe(20);
     });
   });
+
+  describe("deleteProductInStock", () => {
+    it("should delete a product in stock", async () => {
+      const newProduct = await productRepository.registerProduct(product);
+
+      const entry: StockEntity = {
+        productId: newProduct.id,
+        quantity: 10,
+      };
+
+      const stockEntry = await stockRepository.productEntry(entry);
+
+      const deleteProduct = await stockRepository.deleteProductInStock(
+        stockEntry
+      );
+
+      const allProduct = await stockRepository.productsInStock();
+
+      expect(allProduct).toHaveLength(0);
+      expect(deleteProduct.productId).toEqual(entry.productId);
+    });
+  });
 });
