@@ -10,18 +10,14 @@ export class StockService {
   }
 
   public async entrySafely(product: StockEntity): Promise<Stock> {
-    const { quantity, productId } = product;
-    const checkId = await this.validProductId(productId);
-    const checkProductInStock = await this.stockRepository.findByProductId(
-      product.productId
-    );
+    const { productId, quantity } = product;
+    const checkProductInStock = await this.validProductId(productId);
 
-    if (!quantity || !productId) throw new Error("Missing or invalid input");
-
-    if (!checkId) throw new Error("Product does not exist");
+    if (quantity <= 0)
+      throw new Error("Product quantity must be greater than zero");
 
     if (checkProductInStock) {
-      const updateEntry = await this.updateQuantity(
+      const updateEntry = await this.sumQuantity(
         checkProductInStock,
         product.quantity
       );
@@ -44,23 +40,32 @@ export class StockService {
   }
 
   public async findByProductIdSefaly(id: string): Promise<Stock> {
-    if (!id) throw new Error("Missing or invalid input");
-
-    const checkId = await this.validProductId(id);
-
-    if (!checkId) throw new Error("Product does not exist");
-
-    const product = await this.stockRepository.findByProductId(id);
+    const product = await this.validProductId(id);
 
     if (!product) throw new Error("Product not yet registered in stock");
 
     return product;
   }
 
-  private async updateQuantity(
-    product: Stock,
-    quantity: number
+  public async updateProductInStockSafely(
+    product: StockEntity
   ): Promise<Stock> {
+    const validPoduct = await this.validProductId(product.productId);
+
+    if (!validPoduct) throw new Error("Product not yet registered in stock");
+
+    if (product.quantity <= 0)
+      throw new Error("Product quantity must be greater than zero");
+
+    const productUpdate = await this.stockRepository.updateProductInStock(
+      validPoduct,
+      product.quantity
+    );
+
+    return productUpdate;
+  }
+
+  private async sumQuantity(product: Stock, quantity: number): Promise<Stock> {
     const newQuantity = quantity + product.quantity;
 
     const updatedEntry = await this.stockRepository.updateProductInStock(
@@ -71,8 +76,14 @@ export class StockService {
     return updatedEntry;
   }
 
-  private async validProductId(id: string): Promise<boolean> {
-    const product = await this.stockRepository.productRepository.validId(id);
+  private async validProductId(id: string): Promise<Stock | null> {
+    if (!id) throw new Error("Missing or invalid input");
+
+    const productId = await this.stockRepository.productRepository.validId(id);
+
+    if (!productId) throw new Error("Product does not exist");
+
+    const product = await this.stockRepository.findByProductId(id);
 
     return product;
   }
