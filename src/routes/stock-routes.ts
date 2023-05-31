@@ -24,6 +24,10 @@ export class StockRouter {
       "/:id",
       this.stockController.getByProductId.bind(this.stockController)
     );
+    this.router.put(
+      "/",
+      this.stockController.putProductInStock.bind(this.stockController)
+    );
   }
 
   public getRouter(): Router {
